@@ -67,7 +67,7 @@ public class PlayerInteraction : MonoBehaviour
 
         // SoundPlayer.Instance.PlayThrow();
         CurrentDraggable.Throw();
-        CurrentDraggable.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 16f, ForceMode.Impulse);
+        CurrentDraggable.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 10f, ForceMode.Impulse);
         // CurrentDraggable.GetComponent<Rigidbody>().isKinematic = false;
         ClearDraggableObject();
     }

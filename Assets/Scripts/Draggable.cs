@@ -54,7 +54,7 @@ public class Draggable : MonoBehaviour
         ChangeValue(true);
     }
 
-    private void ChangeValue(bool value)
+    public void ChangeValue(bool value)
     {
         foreach (var collider in _colliders)
             collider.enabled = value;
