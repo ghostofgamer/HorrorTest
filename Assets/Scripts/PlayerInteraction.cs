@@ -34,7 +34,6 @@ public class PlayerInteraction : MonoBehaviour
 
         if (_currentInteractable != null)
         {
-            // Попробуем вывести имя игрового объекта, если он MonoBehaviour
             if (_currentInteractable is MonoBehaviour mb)
             {
                 Debug.Log(

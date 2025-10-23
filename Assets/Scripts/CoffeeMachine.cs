@@ -1,4 +1,5 @@
 using System.Collections;
+using AttentionContent;
 using Enums;
 using ItemContent;
 using UnityEngine;
@@ -35,52 +36,44 @@ public class CoffeeMachine : MonoBehaviour
             {
                 if (_currentCupCoffee != null)
                 {
-                    Debug.Log(" Кофе машина занята стаканом");
+                    AttentionHintActivator.ShowHint("Кофе машина занята другим стаканом стаканом");
                 }
                 else
                 {
-                    Debug.Log(" То что надо");
                     playerInteraction.ClearDraggableObject();
                     SetCupCoffee(cupCoffee);
                 }
             }
-            else if (_currentCupCoffee != null && _currentCupCoffee.Fullnes && lid.ItemType == ItemType.LidCupCoffee)
+            else if (_currentCupCoffee != null && _currentCupCoffee.Fullnes && !_currentCupCoffee.Completed &&
+                     lid.ItemType == ItemType.LidCupCoffee)
             {
                 playerInteraction.ClearDraggableObject();
                 _currentCupCoffee.EnableLid(lid);
-                CompletedCupCoffee();
             }
-            else if (cupCoffee.Completed && cupCoffee.Fullnes)
+            else if (cupCoffee != null && cupCoffee.Completed && cupCoffee.Fullnes)
             {
-                Debug.Log(" у тебя в руках готовое кофе");
+              
+                AttentionHintActivator.ShowHint("У тебя в руках готовое кофе");
             }
             else
             {
-                Debug.Log(" у тебя в руках не стаканчик для кофе");
+                AttentionHintActivator.ShowHint("У тебя в руках не то что требуется");
             }
         }
         else
         {
-            Debug.Log("у тебя в руках пусто ");
-
             if (_currentCupCoffee != null)
             {
                 if (!_currentCupCoffee.Fullnes)
-                {
                     PourCoffee();
-                }
                 else if (_currentCupCoffee.Fullnes && _currentCupCoffee.Completed)
-                {
-                    Debug.Log("Чашка налита и закрыта уже");
-                }
+                    CompletedCupCoffee(playerInteraction);
                 else
-                {
-                    Debug.Log("Чашка уже полная накрой ее крышкой");
-                }
+                    AttentionHintActivator.ShowHint("Чашка уже полная накрой ее крышкой");
             }
             else
             {
-                Debug.Log("Пусто в кофемашине.поставь стаканчик");
+                AttentionHintActivator.ShowHint("Пусто в кофемашине.поставь стаканчик");
             }
         }
     }
@@ -117,28 +110,14 @@ public class CoffeeMachine : MonoBehaviour
         _colliderCoffeeMachine.enabled = true;
     }
 
-    private void CompletedCupCoffee()
+    private void CompletedCupCoffee(PlayerInteraction playerInteraction)
     {
         Draggable draggable = _currentCupCoffee.GetComponent<Draggable>();
 
         if (draggable != null)
         {
-            draggable.ChangeValue(true, true);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.TryGetComponent(out CupCoffee cupCoffee))
-        {
-            if (_currentCupCoffee != null && _currentCupCoffee == cupCoffee)
-            {
-                _currentCupCoffee = null;
-            }
-            else
-            {
-                Debug.Log("НЕ та чашка что была в кофемашине");
-            }
+            draggable.Drag(playerInteraction);
+            _currentCupCoffee = null;
         }
     }
 }
