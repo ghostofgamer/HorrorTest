@@ -37,7 +37,6 @@ public class Draggable : MonoBehaviour
         {
             ChangeValue(false, true);
             InHands = true;
-            Debug.Log("DRAG");
             _parentObject.transform.parent = playerInteraction.DraggablePosition;
             _parentObject.DOLocalMove(Vector3.zero, 0.15f).SetEase(Ease.InOutQuad);
             _parentObject.DOLocalRotate(Vector3.zero, 0.15f).SetEase(Ease.InOutQuad);
