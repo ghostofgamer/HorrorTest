@@ -1,3 +1,4 @@
+using Enums;
 using UnityEngine;
 
 namespace ItemContent
@@ -6,25 +7,45 @@ namespace ItemContent
     {
         [SerializeField] private GameObject _lid;
         [SerializeField] private GameObject _fullnes;
+        [SerializeField] private Transform _lidPosition;
 
-        public bool ProgressCompleted { get; private set; }
+        public bool Fullnes { get; private set; }
+        public bool Completed { get; private set; }
 
-        private void Start()
+        public void EnableLid(Item lidCupCoffee)
         {
-            ChangeProgress();
-        }
-
-        public void EnableLid()
-        {
-            if (_lid != null)
+            if (!Completed && lidCupCoffee.ItemType == ItemType.LidCupCoffee)
             {
+                Draggable draggable = lidCupCoffee.GetComponent<Draggable>();
+
+                if (draggable != null)
+                {
+                    Debug.Log("фываываываыва  1");
+                    draggable.ChangeValue(false, true);
+                    draggable.transform.SetParent(_lidPosition);
+                    Debug.Log("фываываываыва  3 " + draggable.gameObject.name + _lidPosition.gameObject.name);
+                    draggable.transform.localPosition = Vector3.zero;
+                    draggable.transform.localRotation = Quaternion.identity;
+                }
+
+                Completed = true;
+            }
+            else
+            {
+                Debug.Log("Чашка уже полная и закрытая");
+            }
+
+
+            /*if (_lid != null)
+            {
+                Destroy(lidCupCoffee);
                 _lid.SetActive(true);
-                ChangeProgress();
+                Completed = true;
             }
             else
             {
                 Debug.LogWarning("Lid GameObject is not assigned!");
-            }
+            }*/
         }
 
         public void EnableFullness()
@@ -32,17 +53,12 @@ namespace ItemContent
             if (_fullnes != null)
             {
                 _fullnes.SetActive(true);
-                ChangeProgress();
+                Fullnes = true;
             }
             else
             {
                 Debug.LogWarning("Fullness GameObject is not assigned!");
             }
-        }
-
-        private void ChangeProgress()
-        {
-            ProgressCompleted = _lid != null && _fullnes != null && _lid.activeSelf && _fullnes.activeSelf;
         }
     }
 }

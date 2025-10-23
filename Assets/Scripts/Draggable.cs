@@ -35,7 +35,7 @@ public class Draggable : MonoBehaviour
         }
         else
         {
-            ChangeValue(false);
+            ChangeValue(false, true);
             InHands = true;
             Debug.Log("DRAG");
             _parentObject.transform.parent = playerInteraction.DraggablePosition;
@@ -51,14 +51,14 @@ public class Draggable : MonoBehaviour
     {
         InHands = false;
         DraggableThrowed?.Invoke();
-        ChangeValue(true);
+        ChangeValue(true, false);
     }
 
-    public void ChangeValue(bool value)
+    public void ChangeValue(bool colliderValue, bool rigidbodyValue)
     {
         foreach (var collider in _colliders)
-            collider.enabled = value;
+            collider.enabled = colliderValue;
 
-        _rigidbody.isKinematic = !value;
+        _rigidbody.isKinematic = rigidbodyValue;
     }
 }

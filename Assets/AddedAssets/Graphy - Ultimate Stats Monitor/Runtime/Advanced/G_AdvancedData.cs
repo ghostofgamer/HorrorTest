@@ -274,13 +274,13 @@ namespace Tayx.Graphy.Advanced
 
         public void RefreshParameters()
         {
-            foreach( var image in m_backgroundImages )
+            /*foreach( var image in m_backgroundImages )
             {
                 image.color = m_graphyManager.BackgroundColor;
             }
 
             SetPosition( m_graphyManager.AdvancedModulePosition, Vector2.zero );
-            SetState( m_currentModuleState, true );
+            SetState( m_currentModuleState, true );*/
         }
 
         #endregion
