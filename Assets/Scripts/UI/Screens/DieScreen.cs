@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace UI.Screens
 {
-    public class SurvivedScreen : AbstractScreen
+    public class DieScreen : AbstractScreen
     {
         public override void Open()
         {

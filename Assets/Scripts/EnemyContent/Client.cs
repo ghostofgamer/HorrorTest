@@ -1,5 +1,6 @@
 using System.Collections;
 using Enums;
+using PlayerContent;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,27 +8,27 @@ namespace EnemyContent
 {
     public class Client : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private NavMeshAgent _navMeshAgent;
+        [Header("References")] [SerializeField]
+        private NavMeshAgent _navMeshAgent;
+
         [SerializeField] private NavMeshObstacle _meshObstacle;
         [SerializeField] private Animator _animator;
-        [SerializeField] private Transform cashierPoint;
-        [SerializeField] private Transform player;
 
-        [Header("Speed Settings")]
-        [SerializeField] private float _walkSpeed = 1.5f;
+        [Header("Speed Settings")] [SerializeField]
+        private float _walkSpeed = 1.5f;
+
         [SerializeField] private float _runSpeed = 4f;
         [SerializeField] private float smooth = 5f;
 
-        [Header("Combat Settings")]
-        [SerializeField] private float attackDistance = 1.5f;
+        [Header("Combat Settings")] [SerializeField]
+        private float attackDistance = 1.5f;
 
+        private Transform _cashierPoint;
+        private Player _player;
         private float _currentSpeed;
         private float _targetSpeed;
         private ClientState _state;
-
-        public System.Action OnTransformationStart;
-        public System.Action OnPlayerCaught;
+        private bool _isInitialize = false;
 
         private void Start()
         {
@@ -36,17 +37,27 @@ namespace EnemyContent
 
         private void Update()
         {
+            if (!_isInitialize)
+                return;
+
             _currentSpeed = Mathf.Lerp(_currentSpeed, _targetSpeed, smooth * Time.deltaTime);
             _animator.SetFloat("Speed", _currentSpeed);
-            
+
             if (_state == ClientState.Attacking)
             {
                 if (_navMeshAgent.isActiveAndEnabled)
-                    _navMeshAgent.SetDestination(player.position);
+                    _navMeshAgent.SetDestination(_player.transform.position);
 
-                if (Vector3.Distance(transform.position, player.position) <= attackDistance)
+                if (Vector3.Distance(transform.position, _player.transform.position) <= attackDistance)
                     SetState(ClientState.GameOver);
             }
+        }
+
+        public void Init(Player player, Transform cashierPoint)
+        {
+            this._player = player;
+            this._cashierPoint = cashierPoint;
+            _isInitialize = true;
         }
 
         public void SetState(ClientState newState)
@@ -59,7 +70,7 @@ namespace EnemyContent
                 case ClientState.MovingToCashier:
                     _targetSpeed = _walkSpeed;
                     _navMeshAgent.speed = _walkSpeed;
-                    StartCoroutine(MoveToPosition(cashierPoint.position,
+                    StartCoroutine(MoveToPosition(_cashierPoint.position,
                         () => { SetState(ClientState.WaitingForCoffee); }));
                     break;
 
@@ -84,15 +95,13 @@ namespace EnemyContent
                 case ClientState.GameOver:
                     _navMeshAgent.enabled = false;
                     _meshObstacle.enabled = true;
-                    // _animator.SetTrigger("Attack");
-                    OnPlayerCaught?.Invoke();
+                    _player.Die();
                     break;
             }
         }
 
         private IEnumerator TransformToMonster()
         {
-            OnTransformationStart?.Invoke();
             _animator.SetTrigger("Mutation");
             yield return new WaitForSeconds(6f);
             SetState(ClientState.Attacking);
