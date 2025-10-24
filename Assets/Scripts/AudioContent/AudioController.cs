@@ -90,7 +90,7 @@ namespace AudioContent
                 Debug.LogWarning("Run clip not assigned in AudioManager!");
                 return;
             }
-            musicSource.volume = 0.1f;
+            musicSource.volume = 0.5f;
             PlayMusic(_runSound);
             
             SetHeartbeatActive(true);

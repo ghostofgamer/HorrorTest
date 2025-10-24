@@ -1,6 +1,7 @@
+using System;
 using System.Collections;
-using AudioContent;
 using Enums;
+using ItemContent;
 using PlayerContent;
 using UnityEngine;
 using UnityEngine.AI;
@@ -32,6 +33,9 @@ namespace EnemyContent
         private float _targetSpeed;
         private ClientState _state;
         private bool _isInitialize = false;
+
+        public event Action Transformed;
+        public event Action Transforming;
 
         private void Start()
         {
@@ -109,12 +113,14 @@ namespace EnemyContent
 
         private IEnumerator TransformToMonster()
         {
+            Transforming?.Invoke();
             _animator.SetTrigger("Mutation");
             _clientSound.MutationPlay();
             yield return new WaitForSeconds(4f);
             _clientSound.ScreamPlay();
             yield return new WaitForSeconds(2f);
-            AudioController.Instance.RunMusic();
+            // AudioController.Instance.RunMusic();
+            Transformed?.Invoke();
             SetState(ClientState.Attacking);
         }
 
@@ -144,6 +150,24 @@ namespace EnemyContent
         {
             if (_state == ClientState.WaitingForCoffee)
                 SetState(ClientState.Transforming);
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            if (other.collider.TryGetComponent(out CupCoffee cupCoffee) && _state != ClientState.Attacking &&
+                _state != ClientState.Transforming)
+            {
+                if (cupCoffee.Completed)
+                    GiveCoffee();
+                else
+                    _clientSound.WhatAreYouDoing();
+            }
+
+            if (other.collider.TryGetComponent(out Item item) && _state != ClientState.Attacking &&
+                _state != ClientState.Transforming)
+            {
+                _clientSound.WhatAreYouDoing();
+            }
         }
     }
 }

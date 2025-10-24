@@ -17,6 +17,9 @@ namespace InitializationContent
         [SerializeField] private LoadingScreen _loadingScreen;
         [SerializeField] private PlayerController _playerController;
         [SerializeField] private PlayerSound _playerSound;
+        [SerializeField] private GameStateCounter _gameStateCounter;
+        [SerializeField] private CoffeeMachine _coffeeMachine;
+        [SerializeField] private PlayerRotationTarget _playerRotationTarget;
 
         private void Awake()
         {
@@ -46,6 +49,7 @@ namespace InitializationContent
             yield return new WaitForSeconds(0.165f);
 
             _survival.Init(_player);
+            _gameStateCounter.Init(_client, _coffeeMachine);
             _loadingScreen.SetProgress(0.9f);
             yield return new WaitForSeconds(0.3f);
 
@@ -55,8 +59,10 @@ namespace InitializationContent
             _playerController.SwitchController(false);
             _player.gameObject.SetActive(true);
             _playerSound.LastClientPlay();
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(1.5f);
             _client.gameObject.SetActive(true);
+            _playerRotationTarget.RotateTowards(_client.transform,1.45F);
+            yield return new WaitForSeconds(1.5f);
             _playerController.SwitchController(true);
         }
     }

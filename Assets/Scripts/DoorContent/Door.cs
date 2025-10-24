@@ -22,8 +22,7 @@ namespace DoorContent
         {
             _interactableObject.OnAction -= Action;
         }
-
-
+        
         private void Action(PlayerInteraction playerInteraction)
         {
             if (_isLocked)

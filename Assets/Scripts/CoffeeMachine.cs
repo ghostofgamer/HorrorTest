@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using AttentionContent;
 using AudioContent;
@@ -15,6 +16,8 @@ public class CoffeeMachine : MonoBehaviour
     private CupCoffee _currentCupCoffee;
     private Coroutine _coroutine;
     private WaitForSeconds _waitForSeconds = new WaitForSeconds(1.5f);
+
+    public event Action CupCoffeeSetted;
 
     private void OnEnable()
     {
@@ -43,7 +46,7 @@ public class CoffeeMachine : MonoBehaviour
                 {
                     playerInteraction.ClearDraggableObject();
                     SetCupCoffee(cupCoffee);
-                    AudioController.Instance.MysticMusic();
+                    CupCoffeeSetted?.Invoke();
                 }
             }
             else if (_currentCupCoffee != null && _currentCupCoffee.Fullnes && !_currentCupCoffee.Completed &&
@@ -51,7 +54,6 @@ public class CoffeeMachine : MonoBehaviour
             {
                 playerInteraction.ClearDraggableObject();
                 _currentCupCoffee.EnableLid(lid);
-                // AudioController.Instance.MysticMusic();
             }
             else if (cupCoffee != null && cupCoffee.Completed && cupCoffee.Fullnes)
             {
