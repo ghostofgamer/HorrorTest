@@ -14,7 +14,6 @@ public class Survival : MonoBehaviour
     private void OnEnable()
     {
         _car.Survived += OnSurvived;
-        _player.Died += OnDie;
     }
 
     private void OnDisable()
@@ -26,6 +25,7 @@ public class Survival : MonoBehaviour
     public void Init(Player player)
     {
         _player = player;
+        _player.Died += OnDie;
     }
 
     private void OnSurvived()

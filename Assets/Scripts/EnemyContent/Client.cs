@@ -1,4 +1,5 @@
 using System.Collections;
+using AudioContent;
 using Enums;
 using PlayerContent;
 using UnityEngine;
@@ -10,6 +11,8 @@ namespace EnemyContent
     {
         [Header("References")] [SerializeField]
         private NavMeshAgent _navMeshAgent;
+
+        [SerializeField] private ClientSound _clientSound;
 
         [SerializeField] private NavMeshObstacle _meshObstacle;
         [SerializeField] private Animator _animator;
@@ -71,7 +74,11 @@ namespace EnemyContent
                     _targetSpeed = _walkSpeed;
                     _navMeshAgent.speed = _walkSpeed;
                     StartCoroutine(MoveToPosition(_cashierPoint.position,
-                        () => { SetState(ClientState.WaitingForCoffee); }));
+                        () =>
+                        {
+                            _clientSound.NeedCoffeePlay();
+                            SetState(ClientState.WaitingForCoffee);
+                        }));
                     break;
 
                 case ClientState.WaitingForCoffee:
@@ -103,7 +110,11 @@ namespace EnemyContent
         private IEnumerator TransformToMonster()
         {
             _animator.SetTrigger("Mutation");
-            yield return new WaitForSeconds(6f);
+            _clientSound.MutationPlay();
+            yield return new WaitForSeconds(4f);
+            _clientSound.ScreamPlay();
+            yield return new WaitForSeconds(2f);
+            AudioController.Instance.RunMusic();
             SetState(ClientState.Attacking);
         }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using AttentionContent;
+using AudioContent;
 using Enums;
 using ItemContent;
 using UnityEngine;
@@ -42,6 +43,7 @@ public class CoffeeMachine : MonoBehaviour
                 {
                     playerInteraction.ClearDraggableObject();
                     SetCupCoffee(cupCoffee);
+                    AudioController.Instance.MysticMusic();
                 }
             }
             else if (_currentCupCoffee != null && _currentCupCoffee.Fullnes && !_currentCupCoffee.Completed &&
@@ -49,6 +51,7 @@ public class CoffeeMachine : MonoBehaviour
             {
                 playerInteraction.ClearDraggableObject();
                 _currentCupCoffee.EnableLid(lid);
+                // AudioController.Instance.MysticMusic();
             }
             else if (cupCoffee != null && cupCoffee.Completed && cupCoffee.Fullnes)
             {

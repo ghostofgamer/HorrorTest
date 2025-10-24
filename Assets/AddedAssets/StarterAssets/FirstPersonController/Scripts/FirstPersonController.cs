@@ -50,6 +50,14 @@ namespace StarterAssets
 		public float TopClamp = 90.0f;
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -90.0f;
+		
+		[Header("Audio")]
+		public AudioSource footstepAudioSource;
+		public AudioClip[] footstepClips;
+		public float walkStepInterval = 0.5f;
+		public float sprintStepInterval = 0.35f;
+
+		private float _footstepTimer = 0f;
 
 		// cinemachine
 		private float _cinemachineTargetPitch;
@@ -196,6 +204,29 @@ namespace StarterAssets
 
 			// move the player
 			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+			
+			
+			if (Grounded && _speed > 0.1f)
+			{
+				// Выбираем интервал в зависимости от того, бежит ли игрок
+				float currentInterval = _input.sprint ? sprintStepInterval : walkStepInterval;
+
+				_footstepTimer -= Time.deltaTime;
+				if (_footstepTimer <= 0f)
+				{
+					PlayFootstepSound();
+					_footstepTimer = currentInterval;
+				}
+			}
+		}
+		
+		private void PlayFootstepSound()
+		{
+			if (footstepClips.Length == 0 || footstepAudioSource == null)
+				return;
+
+			int index = Random.Range(0, footstepClips.Length);
+			footstepAudioSource.PlayOneShot(footstepClips[index]);
 		}
 
 		private void JumpAndGravity()

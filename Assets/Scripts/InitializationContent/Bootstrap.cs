@@ -15,6 +15,8 @@ namespace InitializationContent
         [SerializeField] private Transform _cashierPosition;
         [SerializeField] private Survival _survival;
         [SerializeField] private LoadingScreen _loadingScreen;
+        [SerializeField] private PlayerController _playerController;
+        [SerializeField] private PlayerSound _playerSound;
 
         private void Awake()
         {
@@ -49,6 +51,13 @@ namespace InitializationContent
 
             _loadingScreen.SetProgress(1f);
             yield return _loadingScreen.FadeOut();
+
+            _playerController.SwitchController(false);
+            _player.gameObject.SetActive(true);
+            _playerSound.LastClientPlay();
+            yield return new WaitForSeconds(2.5f);
+            _client.gameObject.SetActive(true);
+            _playerController.SwitchController(true);
         }
     }
 }
