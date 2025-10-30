@@ -10,22 +10,19 @@ namespace EnemyContent
 {
     public class Client : MonoBehaviour
     {
-        [Header("References")] [SerializeField]
-        private NavMeshAgent _navMeshAgent;
-
+        [Header("References")] 
+        [SerializeField] private NavMeshAgent _navMeshAgent;
         [SerializeField] private ClientSound _clientSound;
-
         [SerializeField] private NavMeshObstacle _meshObstacle;
         [SerializeField] private Animator _animator;
-
-        [Header("Speed Settings")] [SerializeField]
-        private float _walkSpeed = 1.5f;
-
+        
+        [Header("Speed Settings")] 
+        [SerializeField] private float _walkSpeed = 1.5f;
         [SerializeField] private float _runSpeed = 4f;
         [SerializeField] private float smooth = 5f;
 
-        [Header("Combat Settings")] [SerializeField]
-        private float attackDistance = 1.5f;
+        [Header("Combat Settings")] 
+        [SerializeField] private float attackDistance = 1.5f;
 
         private Transform _cashierPoint;
         private Player _player;
@@ -67,7 +64,7 @@ namespace EnemyContent
             _isInitialize = true;
         }
 
-        public void SetState(ClientState newState)
+        private void SetState(ClientState newState)
         {
             _state = newState;
             StopAllCoroutines();
@@ -119,7 +116,6 @@ namespace EnemyContent
             yield return new WaitForSeconds(4f);
             _clientSound.ScreamPlay();
             yield return new WaitForSeconds(2f);
-            // AudioController.Instance.RunMusic();
             Transformed?.Invoke();
             SetState(ClientState.Attacking);
         }
@@ -129,7 +125,6 @@ namespace EnemyContent
             _meshObstacle.enabled = false;
             _navMeshAgent.enabled = true;
             yield return null;
-
             _navMeshAgent.ResetPath();
             _navMeshAgent.SetDestination(position);
 
@@ -141,7 +136,6 @@ namespace EnemyContent
 
             _navMeshAgent.enabled = false;
             _meshObstacle.enabled = true;
-
             callback?.Invoke();
         }
 

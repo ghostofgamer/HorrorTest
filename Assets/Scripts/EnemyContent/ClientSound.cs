@@ -9,7 +9,6 @@ namespace EnemyContent
         [SerializeField] private AudioClip _mutationClip;
         [SerializeField] private AudioClip _screamClip;
         [SerializeField] private AudioClip[] _stopItFrazes;
-
         [SerializeField] private float _voiceCooldown = 1.5f;
 
         private float _lastVoiceTime = -10f;

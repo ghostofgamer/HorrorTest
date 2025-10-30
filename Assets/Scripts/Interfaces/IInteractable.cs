@@ -1,3 +1,5 @@
+using PlayerContent;
+
 namespace Interfaces
 {
     public interface IInteractable

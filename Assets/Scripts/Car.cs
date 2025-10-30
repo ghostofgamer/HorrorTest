@@ -1,4 +1,5 @@
 using System;
+using PlayerContent;
 using UnityEngine;
 
 public class Car : MonoBehaviour
@@ -19,7 +20,6 @@ public class Car : MonoBehaviour
 
     private void Action(PlayerInteraction playerInteraction)
     {
-        Debug.Log("Выжил");
         Survived?.Invoke();
     }
 }

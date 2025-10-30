@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using AttentionContent;
-using AudioContent;
 using Enums;
 using ItemContent;
+using PlayerContent;
 using UnityEngine;
 
 public class CoffeeMachine : MonoBehaviour

@@ -36,26 +36,20 @@ namespace InitializationContent
             _loadingScreen.Show();
 
             CursorSwitcher.Hide();
-
             _loadingScreen.SetProgress(0.1f);
             _client.Init(_player, _cashierPosition);
             yield return new WaitForSeconds(0.1f);
-
             _loadingScreen.SetProgress(0.4f);
             yield return null;
-
             AttentionHintActivator.Init(_attentionHintViewer);
             _loadingScreen.SetProgress(0.6f);
             yield return new WaitForSeconds(0.165f);
-
             _survival.Init(_player);
             _gameStateCounter.Init(_client, _coffeeMachine);
             _loadingScreen.SetProgress(0.9f);
             yield return new WaitForSeconds(0.3f);
-
             _loadingScreen.SetProgress(1f);
             yield return _loadingScreen.FadeOut();
-
             _playerController.SwitchController(false);
             _player.gameObject.SetActive(true);
             _playerSound.LastClientPlay();

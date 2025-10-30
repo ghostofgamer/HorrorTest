@@ -1,6 +1,7 @@
 using System;
 using HighlightPlus;
 using Interfaces;
+using PlayerContent;
 using UnityEngine;
 
 public class InteractableObject : MonoBehaviour, IInteractable

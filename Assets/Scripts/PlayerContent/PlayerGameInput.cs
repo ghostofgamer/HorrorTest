@@ -1,17 +1,20 @@
 using System;
 using UnityEngine;
 
-public class PlayerGameInput : MonoBehaviour
+namespace PlayerContent
 {
-    public event Action ActionEvent;
-    public event Action ThrowEvent;
-
-    private void Update()
+    public class PlayerGameInput : MonoBehaviour
     {
-        if (Input.GetKeyDown(KeyCode.E))
-            ActionEvent?.Invoke();
+        public event Action ActionEvent;
+        public event Action ThrowEvent;
 
-        if (Input.GetKeyDown(KeyCode.F))
-            ThrowEvent?.Invoke();
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+                ActionEvent?.Invoke();
+
+            if (Input.GetKeyDown(KeyCode.F))
+                ThrowEvent?.Invoke();
+        }
     }
 }

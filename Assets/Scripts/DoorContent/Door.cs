@@ -1,5 +1,6 @@
 using AttentionContent;
 using Enums;
+using PlayerContent;
 using UnityEngine;
 
 namespace DoorContent

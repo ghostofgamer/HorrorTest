@@ -3,83 +3,83 @@ using Interfaces;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-public class PlayerInteraction : MonoBehaviour
+namespace PlayerContent
 {
-    [SerializeField] private PlayerGameInput _playerGameInput;
-    [SerializeField] private Transform _draggablePosition;
-
-    private IInteractable _currentInteractable;
-
-    public event Action<IInteractable> CurrentDraggerChanger;
-
-    public Transform DraggablePosition => _draggablePosition;
-    public Draggable CurrentDraggable { get; private set; }
-
-    private void OnEnable()
+    public class PlayerInteraction : MonoBehaviour
     {
-        _playerGameInput.ActionEvent += Action;
-        _playerGameInput.ThrowEvent += ThrowItem;
-    }
+        [SerializeField] private PlayerGameInput _playerGameInput;
+        [SerializeField] private Transform _draggablePosition;
+        [SerializeField] private float _force = 10f;
 
-    private void OnDisable()
-    {
-        _playerGameInput.ActionEvent -= Action;
-        _playerGameInput.ThrowEvent -= ThrowItem;
-    }
+        private IInteractable _currentInteractable;
 
-    public void SetCurrentInteractableObject(IInteractable iInteractable)
-    {
-        _currentInteractable = iInteractable;
-        CurrentDraggerChanger?.Invoke(_currentInteractable);
+        public event Action<IInteractable> CurrentDraggerChanger;
 
-        if (_currentInteractable != null)
+        public Transform DraggablePosition => _draggablePosition;
+        public Draggable CurrentDraggable { get; private set; }
+
+        private void OnEnable()
         {
-            if (_currentInteractable is MonoBehaviour mb)
+            _playerGameInput.ActionEvent += Action;
+            _playerGameInput.ThrowEvent += ThrowItem;
+        }
+
+        private void OnDisable()
+        {
+            _playerGameInput.ActionEvent -= Action;
+            _playerGameInput.ThrowEvent -= ThrowItem;
+        }
+
+        public void SetCurrentInteractableObject(IInteractable iInteractable)
+        {
+            _currentInteractable = iInteractable;
+            CurrentDraggerChanger?.Invoke(_currentInteractable);
+
+            if (_currentInteractable != null)
             {
-                Debug.Log(
-                    $"[Interactor] Текущий интерактивный объект: {mb.name} ({_currentInteractable.GetType().Name})");
+                if (_currentInteractable is MonoBehaviour mb)
+                {
+                    Debug.Log(
+                        $"[Interactor] Текущий интерактивный объект: {mb.name} ({_currentInteractable.GetType().Name})");
+                }
+                else
+                {
+                    Debug.Log(
+                        $"[Interactor] Текущий интерактивный объект (без MonoBehaviour): {_currentInteractable.GetType().Name}");
+                }
             }
             else
             {
-                Debug.Log(
-                    $"[Interactor] Текущий интерактивный объект (без MonoBehaviour): {_currentInteractable.GetType().Name}");
+                Debug.Log("[Interactor] Интерактивный объект сброшен (null)");
             }
         }
-        else
+
+        private void Action()
         {
-            Debug.Log("[Interactor] Интерактивный объект сброшен (null)");
+            if (_currentInteractable != null)
+                _currentInteractable.Action(this);
         }
-    }
 
-    private void Action()
-    {
-        if (_currentInteractable != null)
-            _currentInteractable.Action(this);
-    }
+        private void ThrowItem()
+        {
+            if (CurrentDraggable == null)
+                return;
 
-    private void ThrowItem()
-    {
-        if (CurrentDraggable == null)
-            return;
+            CurrentDraggable.Throw();
+            CurrentDraggable.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * _force, ForceMode.Impulse);
+            ClearDraggableObject();
+        }
 
-        // SoundPlayer.Instance.PlayThrow();
-        CurrentDraggable.Throw();
-        CurrentDraggable.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 10f, ForceMode.Impulse);
-        // CurrentDraggable.GetComponent<Rigidbody>().isKinematic = false;
-        ClearDraggableObject();
-    }
-    
-    public void SetDraggableObject(Draggable draggable)
-    {
-        // SoundPlayer.Instance.PlayPickUp();
-        CurrentDraggable = draggable;
-        draggable.transform.SetParent(_draggablePosition);
-        // draggable.GetComponent<Rigidbody>().isKinematic = true;
-    }
+        public void SetDraggableObject(Draggable draggable)
+        {
+            CurrentDraggable = draggable;
+            draggable.transform.SetParent(_draggablePosition);
+        }
 
-    public void ClearDraggableObject()
-    {
-        CurrentDraggable.transform.SetParent(null);
-        CurrentDraggable = null;
+        public void ClearDraggableObject()
+        {
+            CurrentDraggable.transform.SetParent(null);
+            CurrentDraggable = null;
+        }
     }
 }

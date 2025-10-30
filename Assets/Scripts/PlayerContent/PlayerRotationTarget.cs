@@ -14,11 +14,10 @@ namespace PlayerContent
         {
             Vector3 direction = (target.position - transform.position).normalized;
             direction.y = 0f;
-
             Quaternion startRotation = transform.rotation;
             Quaternion endRotation = Quaternion.LookRotation(direction);
-
             float elapsed = 0f;
+            
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;

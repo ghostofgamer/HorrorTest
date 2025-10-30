@@ -56,30 +56,5 @@ namespace PlayerContent
                 _playerInteraction.SetCurrentInteractableObject(null);
             }
         }
-        
-        private void OnDrawGizmos()
-        {
-            if (_playerCamera == null) return;
-
-            Vector3 origin = _playerCamera.transform.position;
-            Vector3 direction = _playerCamera.transform.forward;
-
-            if (_lastHit.collider != null)
-            {
-                // Рисуем луч до столкновения
-                Gizmos.color = Color.red;
-                Gizmos.DrawLine(origin, _lastHit.point);
-
-                // Точку столкновения
-                Gizmos.color = Color.blue;
-                Gizmos.DrawSphere(_lastHit.point, 0.05f);
-            }
-            else
-            {
-                // Если ничего не попали — просто рисуем луч фиксированной длины
-                Gizmos.color = Color.green;
-                Gizmos.DrawLine(origin, origin + direction * _interactDistance);
-            }
-        }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using PlayerContent;
 using UnityEngine;
 
 public class Draggable : MonoBehaviour
@@ -10,12 +11,10 @@ public class Draggable : MonoBehaviour
     [SerializeField] private Rigidbody _rigidbody;
 
     public event Action DraggablePicked;
-
     public event Action DraggableThrowed;
-
     public event Action PutOnShelfCompleting;
-
-    public bool InHands;
+    
+    public bool InHands { get;private set; }
 
     private void OnEnable()
     {

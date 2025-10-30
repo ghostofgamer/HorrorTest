@@ -6,9 +6,8 @@ using UnityEngine.Rendering.Universal;
 
 public class GameStateCounter : MonoBehaviour
 {
-    [Header("Post Processing Volume")] [SerializeField]
-    private Volume _postProcessVolume;
-
+    [Header("Post Processing Volume")] 
+    [SerializeField] private Volume _postProcessVolume;
     [SerializeField] private GameObject _runInfo;
     [SerializeField] private Color _adjustColor;
 
@@ -19,6 +18,7 @@ public class GameStateCounter : MonoBehaviour
     private ChromaticAberration _chromaticAberration;
 
     public bool StateRun { get; private set; } = false;
+    
     private void OnDisable()
     {
         _client.Transformed -= RunStateActivate;
